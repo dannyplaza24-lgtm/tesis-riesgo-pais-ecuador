@@ -1,0 +1,15 @@
+# --- DATOS QUE NO DEBEN SUBIRSE (Por peso y privacidad) ---
+data/
+*.csv
+*.xlsx
+*.xls
+*.pkl
+
+# --- ARCHIVOS DE SISTEMA Y ENTORNOS ---
+__pycache__/
+.ipynb_checkpoints/
+tesis_env/
+.env
+
+# --- ARCHIVOS TEMPORALES DE PYTHON ---
+*.pyc
