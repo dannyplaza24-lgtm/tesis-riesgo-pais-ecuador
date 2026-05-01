@@ -1,0 +1,215 @@
+\chapter{Resultados}
+
+% --------------------------------------------------------
+\section{Baseline ARIMA}
+% --------------------------------------------------------
+
+El modelo ARIMA(2,0,1), seleccionado automáticamente mediante criterio AIC, establece el piso de comparación.
+La prueba ADF sobre el EMBI arroja estadístico $-4.336$ ($p = 0.0004$), confirmando estacionariedad en niveles.
+
+\begin{table}[H]
+\centering
+\caption{Desempeño del baseline ARIMA}
+\label{tab:arima}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Período} & \textbf{Esquema} & \textbf{RMSE (pb)} \\
+\midrule
+Validación & Rolling window (3 años) & 59.47 \\
+Test        & Rolling window (3 años) & 107.48 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% TODO: comentar el salto validación→test como evidencia de que ARIMA no captura shocks exógenos
+
+% --------------------------------------------------------
+\section{Selección de modelo ML: XGBoost vs Random Forest}
+% --------------------------------------------------------
+
+\begin{table}[H]
+\centering
+\caption{Comparación XGBoost vs Random Forest (CV, 10 folds)}
+\label{tab:cv_comparison}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Modelo} & \textbf{RMSE CV medio (pb)} & \textbf{Std CV (pb)} & \textbf{p-valor Wilcoxon} \\
+\midrule
+Random Forest & 299.29 & $\pm$494.57 & \multirow{2}{*}{0.0273} \\
+XGBoost       & 241.55 & $\pm$499.00 & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% TODO: comentar el alto std como característica del EMBI ecuatoriano con picos extremos
+
+Los hiperparámetros óptimos del XGBoost son: \texttt{n\_estimators=607}, \texttt{learning\_rate=0.093},
+\texttt{max\_depth=4}, \texttt{subsample=0.848}, \texttt{colsample\_bytree=0.980},
+\texttt{reg\_alpha=0.662}, \texttt{reg\_lambda=1.459}, \texttt{gamma=0.735}.
+
+% --------------------------------------------------------
+\section{Desempeño en test: XGBoost completo}
+% --------------------------------------------------------
+
+\begin{table}[H]
+\centering
+\caption{Métricas del XGBoost completo en test}
+\label{tab:xgb_test}
+\begin{tabular}{lc}
+\toprule
+\textbf{Métrica} & \textbf{Valor} \\
+\midrule
+RMSE  & 64.16 pb \\
+MAE   & 34.90 pb \\
+R$^2$ & 0.9555   \\
+Mejora vs ARIMA & $-$40.3\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% --------------------------------------------------------
+\section{Experimento de ablación}
+% --------------------------------------------------------
+
+% TODO: introducir los 4 grupos y su justificación
+
+\begin{table}[H]
+\centering
+\caption{Resultados del experimento de ablación por grupo de variables}
+\label{tab:ablation}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Grupo} & \textbf{Features NLP} & \textbf{RMSE (pb)} & \textbf{MAE (pb)} & \textbf{R$^2$} \\
+\midrule
+ARIMA baseline      & ---  & 107.48 & ---   & ---    \\
+A — Solo AR         & 0    & 51.31  & 27.15 & 0.9715 \\
+B — AR + Macro      & 0    & 60.07  & 41.12 & 0.9610 \\
+C — AR + NLP        & 4    & \textbf{49.01}  & \textbf{24.93} & \textbf{0.9740} \\
+D — AR + Macro + NLP& 4    & 57.48  & 37.70 & 0.9643 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% TODO: comentar hallazgos principales:
+%   1. Grupo B peor que Grupo A — variables macro locales generan ruido
+%   2. Grupo C mejor — NLP añade señal complementaria a los lags AR
+%   3. Grupo D no es el mejor — combinación macro+NLP diluye el beneficio del NLP
+
+% Wilcoxon tests
+% TODO: reportar p-valores (A vs C: 0.1250, B vs D: 0.3125) y discutir bajo poder con 5 folds
+
+% Figuras SHAP
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{shap_beeswarm.png}
+\caption{SHAP beeswarm — importancia y dirección de las features en el modelo completo}
+\label{fig:shap_beeswarm}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{shap_categorias.png}
+\caption{Importancia SHAP agregada por categoría de variable}
+\label{fig:shap_categorias}
+\end{figure}
+
+% --------------------------------------------------------
+\section{Causalidad de Granger}
+% --------------------------------------------------------
+
+% TODO: tabla de resultados Granger (dirección, p-valor, lags significativos)
+% Figura
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{granger_heatmap.png}
+\caption{Heatmap de causalidad de Granger (lags 1--10 días hábiles)}
+\label{fig:granger}
+\end{figure}
+
+% TODO: comentar: sin causalidad NLP→EMBI; causalidad inversa EMBI→tono (lags 1-4)
+
+% --------------------------------------------------------
+\section{Análisis de regímenes estructurales}
+% --------------------------------------------------------
+
+\subsection{Tests de quiebre estructural}
+
+\begin{table}[H]
+\centering
+\caption{Resultados de los tests de quiebre estructural}
+\label{tab:chow}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Test} & \textbf{Fecha} & \textbf{F-stat} & \textbf{p-valor} & \textbf{n$_1$} & \textbf{n$_2$} \\
+\midrule
+Chow  & 2020-03-01 & 5.52  & 0.0002 & 1.587 & 1.457 \\
+Chow  & 2022-01-01 & 11.61 & 0.0000 & 2.048 & 996   \\
+Quandt-Andrews & 2020-03-25 & 53.58 & 0.0000 & --- & --- \\
+CUSUM & --- & 0.848 & 0.469 & \multicolumn{2}{c}{No significativo} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{chow_cusum_analysis.png}
+\caption{CUSUM sobre residuos OLS AR(3) con bandas de confianza al 95\%}
+\label{fig:cusum}
+\end{figure}
+
+\subsection{Importancia SHAP por régimen}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{shap_regimenes_heatmap.png}
+\caption{Heatmap de importancia SHAP (top-15 features) por régimen temporal}
+\label{fig:shap_regimenes}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{rmse_por_regimen.png}
+\caption{RMSE por subperíodo: pre-COVID, COVID, post-COVID}
+\label{fig:rmse_regimen}
+\end{figure}
+
+% TODO: comentar los tres hallazgos del régimen:
+%   1. Pre-COVID: exogeneidad total (variables externas + AR)
+%   2. COVID: desempleo local irrumpe (SHAP=125.98)
+%   3. Post-COVID: dominancia Fed + DXY en economía dolarizada
+
+% --------------------------------------------------------
+\section{Autoencoder NLP}
+% --------------------------------------------------------
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{autoencoder_loss_curve.png}
+\caption{Curva de pérdida del autoencoder por época (train vs validación)}
+\label{fig:ae_loss}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Comparativa de representaciones NLP en el modelo XGBoost}
+\label{tab:autoencoder}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Representación NLP} & \textbf{Features} & \textbf{RMSE (pb)} & \textbf{MAE (pb)} & \textbf{R$^2$} \\
+\midrule
+Original (4 rolling 30d) & 4 & 59.29 & 39.37 & 0.9620 \\
+PCA-3 (reducción lineal) & 3 & 60.11 & 41.14 & 0.9609 \\
+Autoencoder-3 (no lineal)& 3 & 63.41 & 44.79 & 0.9565 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{nlp_latentes_correlacion.png}
+\caption{Correlación entre dimensiones latentes del autoencoder y variables NLP originales}
+\label{fig:ae_latentes}
+\end{figure}
+
+% TODO: comentar que la estructura NLP es esencialmente lineal (PCA 77.7% varianza en 3 comp)
+% y que comprimir de 4→3 ya pierde señal predictiva marginal

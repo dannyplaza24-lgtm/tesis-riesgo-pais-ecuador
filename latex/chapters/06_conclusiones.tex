@@ -1,0 +1,52 @@
+\chapter{Conclusiones y Trabajo Futuro}
+
+% --------------------------------------------------------
+\section{Conclusiones}
+% --------------------------------------------------------
+% TODO: ~400 palabras — responder directamente cada pregunta de investigación
+%
+% 1. Sí, el ML (XGBoost, Grupo C) supera al ARIMA: RMSE 49.01 vs 107.48 pb (reducción 54.4%)
+%
+% 2. El NLP aporta: 2.30-2.59 pb de mejora incremental. La señal es de volumen
+%    de cobertura mediática, no de sentimiento.
+%
+% 3. Granger: el NLP no anticipa el EMBI con rezago. La relación es contemporánea;
+%    el EMBI anticipa el tono de las noticias (no al revés).
+%
+% 4. Quiebres estructurales confirmados en 2020-03 y 2022-01. El EMBI ecuatoriano
+%    es exógeno en períodos normales, parcialmente endógeno en crisis.
+%
+% 5. El autoencoder confirma que la representación NLP es esencialmente lineal —
+%    resultado negativo informativo que guía trabajo futuro.
+
+% --------------------------------------------------------
+\section{Implicaciones para política económica}
+% --------------------------------------------------------
+% TODO: ~200 palabras
+% - Un sistema de monitoreo del EMBI en tiempo real basado en este modelo
+%   podría alertar al Ministerio de Finanzas sobre presiones de costo de deuda
+% - La dominancia post-COVID del DXY y Treasury 10Y implica que la política
+%   fiscal ecuatoriana tiene poco margen de acción sobre el EMBI en el corto plazo
+% - El desempleo local como factor COVID sugiere que la credibilidad fiscal
+%   interna sí importa en escenarios de estrés extremo
+
+% --------------------------------------------------------
+\section{Trabajo futuro}
+% --------------------------------------------------------
+% TODO: ~300 palabras — lista priorizada
+%
+% 1. LSTM end-to-end: red recurrente sobre secuencia completa (macro + NLP) — podría
+%    capturar dependencias temporales de orden superior que XGBoost ignora
+%
+% 2. NLP con texto crudo: embeddings FinBERT sobre artículos de noticias GDELT
+%    (requiere acceso a texto, no solo métricas agregadas). Hipótesis: el sentimiento
+%    del texto crudo sí anticipa el EMBI cuando el tono agregado no lo hace
+%
+% 3. Extender a 2008 con GDELT v1: incluir el default Correa requiere reconciliar
+%    dos versiones del dataset con dimensiones diferentes
+%
+% 4. Modelos por régimen: entrenar XGBoost separado para cada subperiodo (pre-COVID,
+%    COVID, post-COVID) y comparar con el modelo global
+%
+% 5. Panel de países EM: extender el análisis a Ecuador + Colombia + Perú + Argentina
+%    para identificar qué factores son idiosincráticos de Ecuador vs regionales

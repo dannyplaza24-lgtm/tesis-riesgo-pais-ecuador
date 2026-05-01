@@ -1,0 +1,12 @@
+change: autoencoder-nlp
+status: applied
+phase: apply
+created: 2026-04-05
+artifacts:
+  exploration: openspec/changes/exploracion-tutor-2026-04/exploration.md
+  proposal: openspec/changes/autoencoder-nlp/proposal.md
+  spec: openspec/changes/autoencoder-nlp/spec.md
+  design: openspec/changes/autoencoder-nlp/design.md
+  tasks: openspec/changes/autoencoder-nlp/tasks.md
+  implementation: notebooks/08_Autoencoder_NLP.ipynb
+next: sdd-verify

@@ -1,0 +1,42 @@
+schema: spec-driven
+
+context: |
+  Project: Tesis de Maestría — Predicción del Riesgo País (EMBI) Ecuador 2013-2025
+  Stack: Python, Jupyter Notebooks, pandas, numpy, scikit-learn, statsmodels, pmdarima, SHAP, yfinance
+  Architecture: Pipeline de 6 notebooks secuenciales (adquisición → baseline → feature engineering → ML/SHAP → ablación → Granger)
+  Dataset: 3047 filas × 22 features (días de trading; split 80/10/10 cronológico)
+  Target: EMBI Ecuador (puntos básicos diarios)
+  Features: macroeconomía local (6), financieros externos/yfinance (7), NLP/GDELT-v2 (10) — excl. remesas y prod. petrolera por cobertura temporal
+  Baseline: ARIMA rolling — RMSE 107.48 pb en test
+  Estado: ML + SHAP completo (NB04), ablación completa (NB05), Granger completo (NB06)
+  Hallazgo clave NLP: relación contemporánea, no predictiva con rezago; EMBI → NLP detectado (inverso)
+  Testing: validación rolling walk-forward (ventana fija 756 días de trading)
+
+rules:
+  proposal:
+    - Identificar si el cambio afecta la reproducibilidad del pipeline (orden de notebooks)
+    - Incluir impacto en métricas existentes (RMSE, MAE) si aplica
+    - Documentar riesgo de data leakage en cualquier transformación temporal
+  specs:
+    - Usar Given/When/Then para escenarios de validación de datos y modelos
+    - Usar RFC 2119 (MUST, SHALL, SHOULD, MAY)
+    - Especificar rangos de fechas y dimensiones esperadas del dataset
+  design:
+    - Documentar decisiones sobre split cronológico vs. aleatorio
+    - Incluir diagrama o descripción del flujo de datos entre notebooks
+    - Registrar decisiones sobre imputación y forward-fill
+  tasks:
+    - Agrupar por notebook afectado
+    - Marcar si la tarea requiere re-ejecutar notebooks downstream
+    - Numeración jerárquica (1.1, 1.2…)
+  apply:
+    - Respetar el orden cronológico del split: NUNCA usar datos futuros en train
+    - Guardar artefactos .pkl al finalizar cada notebook
+    - Mantener prefijos de columnas: target_, macro_, nlp_, oil_, us_, gold_, volatility_, index_, etf_
+  verify:
+    - Confirmar dimensiones del dataset tras cada transformación
+    - Verificar ausencia de data leakage (fechas del test > fechas del train)
+    - Comparar RMSE/MAE contra baseline ARIMA (107.48 / ~70 pb) para validar mejora
+  archive:
+    - Actualizar hallazgos clave en config.yaml si cambian métricas del estado del arte
+    - Documentar cualquier variable eliminada o agregada al dataset final

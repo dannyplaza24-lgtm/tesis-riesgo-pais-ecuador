@@ -1,0 +1,59 @@
+\chapter{Introducción}
+
+% --------------------------------------------------------
+\section{Contexto y motivación}
+% --------------------------------------------------------
+% TODO: ~500 palabras
+% Puntos:
+%   - El EMBI de Ecuador como indicador de riesgo soberano: qué mide, por qué importa
+%   - Ecuador: economía dolarizada, historial de defaults (1999, 2008 Correa, 2020 pandemia)
+%   - Costo económico: 1 pb en el EMBI representa decenas de millones USD en servicio de deuda
+%   - Brecha: los modelos econométricos tradicionales (ARIMA) no capturan shocks exógenos ni información mediática
+%   - Oportunidad: disponibilidad de datos GDELT v2 (noticias globales) + ML moderno
+
+% --------------------------------------------------------
+\section{Pregunta de investigación}
+% --------------------------------------------------------
+% TODO: ~200 palabras
+% Pregunta principal: ¿Puede un modelo de aprendizaje automático entrenado con
+%   variables macroeconómicas, financieras externas e información mediática (NLP)
+%   predecir el EMBI de Ecuador con mayor precisión que el baseline ARIMA?
+%
+% Preguntas secundarias:
+%   1. ¿Qué grupo de variables (AR, macro, NLP) contribuye más a la predicción?
+%   2. ¿Anticipa el volumen de cobertura mediática los movimientos del EMBI (causalidad de Granger)?
+%   3. ¿Existen quiebres estructurales que cambien qué variables determinan el EMBI?
+%   4. ¿Mejora la compresión no lineal (autoencoder) la representación NLP?
+
+% --------------------------------------------------------
+\section{Objetivos}
+% --------------------------------------------------------
+
+\subsection{Objetivo general}
+% TODO
+
+\subsection{Objetivos específicos}
+% TODO (4-5 objetivos alineados con las preguntas secundarias)
+
+% --------------------------------------------------------
+\section{Hipótesis}
+% --------------------------------------------------------
+% TODO:
+%   H1: El XGBoost con variables AR + NLP supera al ARIMA en RMSE fuera de muestra
+%   H2: El NLP aporta mejora incremental significativa sobre el modelo solo-AR
+%   H3: No existe causalidad de Granger NLP → EMBI con rezago diario
+%   H4: Existen quiebres estructurales estadísticamente significativos en 2020 y 2022
+
+% --------------------------------------------------------
+\section{Contribuciones}
+% --------------------------------------------------------
+% TODO: ~300 palabras
+% 1. Primera aplicación sistemática de GDELT v2 para predicción del EMBI ecuatoriano
+% 2. Experimento de ablación que aísla la contribución del NLP vs macro vs AR
+% 3. Análisis de regímenes (Chow + CUSUM + SHAP) que muestra heterogeneidad estructural
+% 4. Evidencia empírica sobre exogeneidad del EMBI ecuatoriano en períodos normales vs crisis
+
+% --------------------------------------------------------
+\section{Estructura del documento}
+% --------------------------------------------------------
+% TODO: párrafo breve describiendo cada capítulo

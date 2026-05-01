@@ -1,0 +1,55 @@
+{
+  // ── LaTeX Workshop ──────────────────────────────────────────
+  "latex-workshop.latex.recipe.default": "pdflatex → biber → pdflatex × 2",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (pdflatex + biber)",
+      "tools": ["latexmk-biber"]
+    },
+    {
+      "name": "pdflatex → biber → pdflatex × 2",
+      "tools": ["pdflatex", "biber", "pdflatex", "pdflatex"]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-biber",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-pdf",
+        "-bibtex",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "pdflatex",
+      "command": "pdflatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ]
+    },
+    {
+      "name": "biber",
+      "command": "biber",
+      "args": ["%DOCFILE%"]
+    }
+  ],
+  // Limpiar archivos auxiliares al hacer clean
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux", "*.bbl", "*.blg", "*.idx", "*.ind", "*.lof",
+    "*.lot", "*.out", "*.toc", "*.acn", "*.acr", "*.alg",
+    "*.glg", "*.glo", "*.gls", "*.fls", "*.log", "*.fdb_latexmk",
+    "*.snm", "*.nav", "*.run.xml", "*.bcf"
+  ],
+  // Mostrar PDF al lado del editor
+  "latex-workshop.view.pdf.viewer": "tab",
+  // No compilar al guardar (compilar manualmente con Ctrl+Alt+B)
+  "latex-workshop.latex.autoBuild.run": "onSave"
+}

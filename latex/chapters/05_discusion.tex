@@ -1,0 +1,67 @@
+\chapter{Discusión}
+
+% --------------------------------------------------------
+\section{¿El ML supera al ARIMA?}
+% --------------------------------------------------------
+% TODO: ~400 palabras
+% - Sí, sustancialmente: 49-64 pb vs 107.48 pb (40-54% reducción)
+% - El salto validación→test del ARIMA revela que no captura shocks exógenos
+% - El XGBoost captura la persistencia AR + shocks contemporáneos del mercado
+% - Relevancia económica: 1 pb EMBI ≈ X millones USD en costo de deuda
+
+% --------------------------------------------------------
+\section{¿El NLP agrega valor predictivo?}
+% --------------------------------------------------------
+% TODO: ~400 palabras
+% - Sí: 2.30-2.59 pb de mejora incremental directa
+% - El NLP que sobrevive feature selection es volumen (event_count, total_articles)
+%   no sentimiento (avg_tone, goldstein eliminados)
+% - Interpretación: el mercado reacciona a que "se hable de Ecuador" independientemente
+%   del tono — incertidumbre mediática como proxy de riesgo
+% - Granger negativo: la cobertura no anticipa, es contemporánea
+% - Implicación: la relación NLP-EMBI no genera arbitraje temporal
+
+% --------------------------------------------------------
+\section{¿Es el EMBI ecuatoriano exógeno?}
+% --------------------------------------------------------
+% TODO: ~500 palabras — la sección más rica de la discusión
+% - En períodos normales: sí (Pre-COVID: top features son EMBI lag + WTI + Treasury + ETF)
+% - En crisis (COVID 2020): el desempleo local irrumpe como segundo factor (SHAP=125.98)
+%   → el mercado evaluaba capacidad de pago local ante el default inminente
+% - Post-COVID (2022-2025): Fed + DXY dominan absolutamente
+%   → coherente con la dolarización: Ecuador no tiene política monetaria propia
+% - Conectar con literatura: hipótesis de "sudden stops", Calvo et al.
+
+% --------------------------------------------------------
+\section{Contexto histórico: el default Correa 2008}
+% --------------------------------------------------------
+% TODO: ~300 palabras
+% - En 2008-2009 Ecuador repudió ~$3.2B en deuda bajo Correa (bonos 2012 y 2030)
+% - Decisión política, no fiscal — primer default voluntario moderno en AL
+% - El EMBI llegó a 4.000+ pb durante el evento
+% - Por qué no está modelado: GDELT v2 empieza en 2013; incluir GDELT v1 requeriría
+%   reconciliar dos versiones con dimensiones distintas → trabajo futuro
+% - Relevancia narrativa: confirma que Ecuador tiene régimen de riesgo propio
+%   diferente al promedio EM
+
+% --------------------------------------------------------
+\section{Sobre la representación NLP: ¿lineal o no lineal?}
+% --------------------------------------------------------
+% TODO: ~300 palabras
+% - Autoencoder no mejora sobre PCA (3.3 pb diferencia)
+% - PCA captura 77.7% de varianza NLP en 3 componentes → estructura esencialmente lineal
+% - Las 4 variables originales (rolling 30d) ya son una representación casi óptima
+% - Implicación: para mejorar la señal NLP se necesitan datos de texto crudo
+%   (embeddings BERT/FinBERT sobre noticias GDELT), no compresión de métricas agregadas
+
+% --------------------------------------------------------
+\section{Limitaciones}
+% --------------------------------------------------------
+% TODO: ~400 palabras
+% 1. Dato diario vs frecuencia de publicación de variables macro (mensual/trimestral)
+%    → solución: lags y rolling means, pero se pierde precisión intra-mes
+% 2. GDELT como proxy mediático: no captura texto completo, solo eventos codificados
+% 3. El período post-COVID (2024-2025) es atípico: reducción de EMBI 1.800→500 pb
+%    bajo Noboa — posible "nuevo régimen" que el modelo histórico no captura bien
+% 4. Ausencia de datos pre-2013 (GDELT v2) excluye el default 2008
+% 5. El test de Wilcoxon con 5 folds tiene bajo poder estadístico

@@ -1,0 +1,67 @@
+\chapter{Datos y Metodología}
+
+% --------------------------------------------------------
+\section{Fuentes de datos}
+% --------------------------------------------------------
+
+\subsection{Variable objetivo: EMBI Ecuador}
+% TODO: descripción de la serie, fuente, período 2004-2025, por qué se usa desde 2013
+
+\subsection{Variables financieras externas}
+% TODO: WTI, Gold, VIX, DXY, US Treasury 10Y, ETF EMB, ETF HYG — fuentes y justificación
+
+\subsection{Variables macroeconómicas locales}
+% TODO: reservas, balanza comercial, desempleo, liquidez M2 — frecuencia, fuente BCE/BM
+
+\subsection{Datos NLP: GDELT v2}
+% TODO: descripción de las 10 variables, filtro por mención a Ecuador, período desde sep-2013
+
+% --------------------------------------------------------
+\section{Preprocesamiento y construcción del dataset}
+% --------------------------------------------------------
+
+\subsection{Integración y alineación temporal}
+% TODO: 3.047 días de trading, decisiones sobre NaN (exclusión de remesas y producción petrolera)
+
+\subsection{División temporal del dataset}
+% TODO: split 80/10/10 cronológico — justificación de no usar K-fold aleatorio
+% Tabla: Train 2.406 días (2013-2024) | Val 274 días | Test 274 días
+
+\subsection{Feature engineering}
+% TODO: lags 1, 7, 30 días + rolling means 7 y 30 días → 132 features
+% target_future = EMBI[t+1] como variable objetivo
+
+\subsection{Selección de variables}
+% TODO: Mutual Information sobre train exclusivamente → 60 variables seleccionadas
+% Tabla de composición: 29 externas, 21 macro, 6 AR, 4 NLP
+
+% --------------------------------------------------------
+\section{Modelos y experimentos}
+% --------------------------------------------------------
+
+\subsection{Baseline: ARIMA}
+% TODO: ARIMA(2,0,1) — selección por auto\_arima, validación rolling (ventana 3 años)
+
+\subsection{XGBoost y Random Forest}
+% TODO: RandomizedSearchCV, 100 iteraciones, TimeSeriesSplit 10 folds
+% Hiperparámetros óptimos XGBoost (tabla)
+% Wilcoxon Signed-Rank para comparar modelos
+
+\subsection{Experimento de ablación}
+% TODO: 4 grupos (A: AR, B: AR+Macro, C: AR+NLP, D: AR+Macro+NLP)
+% Justificación: aislar contribución incremental de cada grupo de variables
+
+\subsection{Causalidad de Granger}
+% TODO: test sobre 4 variables NLP seleccionadas + avg\_tone + goldstein, lags 1-10
+
+\subsection{Análisis de regímenes estructurales}
+% TODO: Test de Chow (2020-03 y 2022-01), Quandt-Andrews, CUSUM, SHAP por subperiodo
+
+\subsection{Autoencoder NLP}
+% TODO: arquitectura 10→5→3→5→10, EarlyStopping, comparativa PCA-3 vs AE-3 vs original-4
+
+% --------------------------------------------------------
+\section{Métricas de evaluación}
+% --------------------------------------------------------
+% TODO: RMSE, MAE, R² — justificación de RMSE como métrica principal
+% Nota sobre por qué el RMSE test es más relevante que el RMSE CV dado el alto std

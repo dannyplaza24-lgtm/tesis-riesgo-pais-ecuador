@@ -1,0 +1,12 @@
+change: analisis-regimenes-embi
+status: applied
+phase: apply
+created: 2026-04-05
+artifacts:
+  exploration: openspec/changes/exploracion-tutor-2026-04/exploration.md
+  proposal: openspec/changes/analisis-regimenes-embi/proposal.md
+  spec: openspec/changes/analisis-regimenes-embi/spec.md
+  design: openspec/changes/analisis-regimenes-embi/design.md
+  tasks: openspec/changes/analisis-regimenes-embi/tasks.md
+  implementation: notebooks/07_Regimenes_Estructurales.ipynb
+next: sdd-verify
