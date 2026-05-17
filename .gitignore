@@ -2,7 +2,7 @@
 # ESTRATEGIA: Excluir todo excepto lo estrictamente necesario
 # =============================================================================
 
-# --- DATOS (peso y privacidad) ---
+# -- DATOS (peso y privacidad) --
 data/
 *.csv
 *.xlsx
