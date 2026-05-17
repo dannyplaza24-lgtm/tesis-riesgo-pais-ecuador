@@ -24,7 +24,8 @@ models/
 node_modules/
 package-lock.json
 
-# --- PRESENTACIONES Y OUTPUTS BINARIOS (se regeneran) ---
+# --- SCRIPTS DE PRESENTACIÓN Y OUTPUTS BINARIOS (se regeneran) ---
+create_presentation.js
 *.pptx
 *.docx
 *.pdf
