@@ -1,15 +1,58 @@
-# --- DATOS QUE NO DEBEN SUBIRSE (Por peso y privacidad) ---
+# =============================================================================
+# ESTRATEGIA: Excluir todo excepto lo estrictamente necesario
+# =============================================================================
+
+# --- DATOS (peso y privacidad) ---
 data/
 *.csv
 *.xlsx
 *.xls
 *.pkl
+*.parquet
+*.db
+*.sqlite
 
-# --- ARCHIVOS DE SISTEMA Y ENTORNOS ---
-__pycache__/
-.ipynb_checkpoints/
+# --- MODELOS ENTRENADOS (binarios pesados) ---
+models/
+
+# --- NODE ---
+node_modules/
+package-lock.json
+
+# --- PRESENTACIONES Y OUTPUTS BINARIOS (se regeneran) ---
+*.pptx
+*.docx
+*.pdf
+~$*
+
+# --- ENTORNOS Y CONFIGURACIÓN LOCAL ---
 tesis_env/
 .env
+.env.*
+*.env
 
-# --- ARCHIVOS TEMPORALES DE PYTHON ---
+# --- ARCHIVOS DE SISTEMA Y EDITORES ---
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# --- PYTHON ---
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# --- DOCUMENTO LATEX (en progreso, no listo) ---
+latex/
+
+# --- HERRAMIENTAS INTERNAS DE DESARROLLO ---
+.atl/
+.claude/
+openspec/
